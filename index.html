@@ -1,0 +1,48 @@
+
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+        <script src="script/script.js"></script>
+    <link rel="stylesheet" href="style/style.css">
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const sceneEl = document.querySelector('a-scene');
+        let arSystem;
+        sceneEl.addEventListener('loaded', function () {
+          arSystem = sceneEl.systems["mindar-image-system"];
+        });
+
+        // detect click event (sûr si l'élément existe)
+        const examplePlane = document.querySelector('#coeur');
+        if (examplePlane) {
+          examplePlane.addEventListener("click", event => {
+            console.log("plane click");
+          });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene mindar-image="imageTargetSrc: chowa.mind" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+      <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="near: 10; far: 10000; objects: .clickable"></a-camera>
+
+        <a-entity id="example-target" mindar-image-target="targetIndex: 0">
+        	  <a-plane id="coeur" class="clickable" src="img/coeur.png" position="-0.5 0 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true" scale="0.1 0.1 0.1"></a-plane>
+          <a-plane id="rond" class="clickable" src="img/rond.png" position="-0 0 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true" scale="0.1 0.1 0.1" animation__enter="property: scale; startEvents: mouseenter; to: 0.08 0.08 0.08; dur: 180; easing: easeOutQuad" animation__leave="property: scale; startEvents: mouseleave; to: 0.1 0.1 0.1; dur: 180; easing: easeOutQuad"></a-plane>
+          <a-plane id="rond2" class="clickable" src="img/rond.png" position="0 0.1 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true" scale="0.1 0.1 0.1" animation__enter="property: scale; startEvents: mouseenter; to: 0.08 0.08 0.08; dur: 180; easing: easeOutQuad" animation__leave="property: scale; startEvents: mouseleave; to: 0.1 0.1 0.1; dur: 180; easing: easeOutQuad"></a-plane>
+          <a-plane id="rond3" class="clickable" src="img/rond.png" position="0 -0.1 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true" scale="0.1 0.1 0.1" animation__enter="property: scale; startEvents: mouseenter; to: 0.08 0.08 0.08; dur: 180; easing: easeOutQuad" animation__leave="property: scale; startEvents: mouseleave; to: 0.1 0.1 0.1; dur: 180; easing: easeOutQuad"></a-plane>
+          <a-plane id="etoile" class="clickable" src="img/etoile.png" position="0.5 0 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true" scale="0.1 0.1 0.1"></a-plane>
+        </a-entity>
+    </a-scene>
+
+    <!-- Popup HTML overlay (hidden by default) -->
+    <div id="popup-overlay" role="dialog" aria-modal="true">
+      <div id="popup-box">
+        <div id="popup-message">Message</div>
+        <button id="popup-close">OK</button>
+      </div>
+    </div>
+  </body>
+</html>
