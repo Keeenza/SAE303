@@ -10,12 +10,13 @@ document.addEventListener('DOMContentLoaded', function () {
     function attachListener() {
         const coeur = document.getElementById('coeur');
         const losange = document.getElementById('losange');
+        const losange2 = document.getElementById('losange2');
         const rond = document.getElementById('rond');
         const rond2 = document.getElementById('rond2');
         const rond3 = document.getElementById('rond3');
         const etoile = document.getElementById('etoile');
         const etoile2 = document.getElementById('etoile2');
-        console.log('elements:', { coeur, losange, rond, rond2, rond3, etoile, etoile2 });
+        console.log('elements:', { coeur, losange, losange2, rond, rond2, rond3, etoile, etoile2 });
 
         function preserveAspectFor(el) {
             if (!el) return;
@@ -52,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // apply to elements if present
         preserveAspectFor(coeur);
         preserveAspectFor(losange);
+        preserveAspectFor(losange2);
         preserveAspectFor(rond);
         preserveAspectFor(rond2);
         preserveAspectFor(rond3);
@@ -98,8 +100,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             
             // Create HTML content with links and colors
-            msg.innerHTML = '<a href="https://ubs-beziers.fr/ecoles-publiques-superieures/" target="_blank" style="display: block; margin: 10px 0; color: #fecf72; text-decoration: none; font-weight: bold;">Ecoles publiques superieures</a>' +
-                           '<a href="https://www.enseignement-prive.info/annuaire-enseignement-prive/beziers-34500" target="_blank" style="display: block; margin: 10px 0; color: #ec6152; text-decoration: none; font-weight: bold;">Ecoles privees avec et sans contrat</a>';
+            msg.innerHTML = '<a href="https://ubs-beziers.fr/ecoles-publiques-superieures/" target="_blank" style="display: block; margin: 10px 0; color: #fecf72; text-decoration: none; font-weight: bold;">liste des écoles publiques superieures</a>' +
+                           '<a href="https://www.enseignement-prive.info/annuaire-enseignement-prive/beziers-34500" target="_blank" style="display: block; margin: 10px 0; color: #4bbab2; text-decoration: none; font-weight: bold;">Liste des écoles privees sous et hors contrat</a>';
             
             overlay.style.display = 'flex';
 
@@ -149,6 +151,41 @@ document.addEventListener('DOMContentLoaded', function () {
             losange.addEventListener('click', function () {
                 console.log('Losange clique - affichage des liens');
                 showPopupWithLinks();
+            });
+        }
+
+        // LOSANGE2 - super animation uniquement (pas de popup)
+        if (losange2) {
+            let isAnimating = false;
+            
+            losange2.addEventListener('click', function () {
+                console.log('Losange2 clique - super animation');
+                
+                if (isAnimating) return;
+                isAnimating = true;
+                
+                // Animation de rotation 3D + zoom
+                losange2.setAttribute('animation__rotate', {
+                    property: 'rotation',
+                    to: '0 360 0',
+                    dur: 1000,
+                    easing: 'easeInOutBack'
+                });
+                
+                losange2.setAttribute('animation__scale', {
+                    property: 'scale',
+                    from: '0.5 0.5 0.5',
+                    to: '0.8 0.8 0.8',
+                    dur: 500,
+                    easing: 'easeOutElastic',
+                    dir: 'alternate',
+                    loop: 1
+                });
+                
+                // Réinitialiser le flag après l'animation
+                setTimeout(function() {
+                    isAnimating = false;
+                }, 1000);
             });
         }
 
