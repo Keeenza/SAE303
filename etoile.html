@@ -1,1 +1,76 @@
-<h1>Etoile html</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom 3D</title>
+    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+</head>
+<body>
+
+    <a-scene>
+        <!-- Assets -->
+        <a-assets>
+            <!-- Modèles 3D -->
+            <a-asset-item id="classroomModel" src="classroom.glb"></a-asset-item>
+        </a-assets>
+
+        <!-- Environnement -->
+        <a-sky color="#9c978f"></a-sky>
+
+        <!-- Lumières -->
+        <a-light type="ambient" color="#FFF" intensity="0.6"></a-light>
+        <a-light type="directional" position="5 10 7" intensity="0.8" color="#FFEECC"></a-light>
+        <a-light type="point" position="0 3 0" color="#FF8C00" intensity="0.4" distance="30"></a-light>
+
+        <!-- Map principale - Classe -->
+        <a-entity gltf-model="classroom.glb" position="0 4.90584 0" scale="2.85903 2.85903 2.85903" rotation="0 94.18 0"></a-entity>
+        
+        <!-- Étudiant 1 avec bulle -->
+        <a-entity position="3.3548 2 -11.15681">
+            <a-entity gltf-model="student.glb" scale="6.70474 6.70474 6.70474" rotation="0 -75.53932866784287 0"></a-entity>
+            
+            <!-- Bulle de texte -->
+            <a-entity position="0 2.5 0">
+                <a-plane color="#000000" width="1.5" height="0.6" look-at="#camera" material="opacity: 0.9"></a-plane>
+                <a-text value="Bonjour" align="center" color="#FFFFFF" width="4" position="0 0 0.01" look-at="#camera"></a-text>
+            </a-entity>
+        </a-entity>
+
+        <!-- Étudiant 2 avec bulle -->
+        <a-entity position="1.0148 2 -11.15681">
+            <a-entity gltf-model="student.glb" scale="6.70474 6.70474 6.70474" rotation="0 -75.32933 0"></a-entity>
+            
+            <!-- Bulle de texte -->
+            <a-entity position="0 1.6 0">
+                <a-plane color="#000000" width="1.5" height="0.6" look-at="#camera" material="opacity: 0.9"></a-plane>
+                <a-text value="Bonjour" align="center" color="#FFFFFF" width="4" position="0 0 0.01" look-at="#camera"></a-text>
+            </a-entity>
+        </a-entity>
+
+        <!-- Étudiant 3 avec bulle -->
+        <a-entity position="-1.2452 2 -11.15681">
+            <a-entity gltf-model="student.glb" scale="6.70474 6.70474 6.70474" rotation="0 -75.32933 0"></a-entity>
+            
+            <!-- Bulle de texte -->
+            <a-entity position="0 2.5 0">
+                <a-plane color="#000000" width="1.5" height="0.6" look-at="#camera" material="opacity: 0.9"></a-plane>
+                <a-text value="Bonjour" align="center" color="#FFFFFF" width="4" position="0 0 0.01" look-at="#camera"></a-text>
+            </a-entity>
+        </a-entity>
+
+        <!-- Caméra avec raycaster -->
+        <a-entity id="camera" position="0 1.6 0">
+            <a-camera look-controls wasd-controls="enabled: true">
+                <a-entity cursor="fuse: false; rayOrigin: mouse" 
+                          raycaster="objects: .shootable; far: 50"
+                          position="0 0 -1">
+                </a-entity>
+            </a-camera>
+        </a-entity>
+
+        <!-- Zone de spawn des cibles (les cibles seront ajoutées dynamiquement) -->
+    </a-scene>
+
+</body>
+</html>

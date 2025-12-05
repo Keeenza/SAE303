@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu Thanksgiving VR - TP</title>
+    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        /* HUD - Interface de jeu */
+        #hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .hud-panel {
+            background: rgba(139, 69, 19, 0.9);
+            border: 3px solid #ff8c00;
+            border-radius: 15px;
+            padding: 20px 40px;
+            color: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .hud-panel h2 {
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hud-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ffa500;
+            text-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+        }
+
+        /* Réticule de visée - MASQUÉ */
+        #reticle {
+            display: none;
+        }
+
+        /* Instructions */
+        #instructions {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        #instructions h3 {
+            margin: 0 0 10px 0;
+            color: #ffa500;
+        }
+
+        #instructions p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        /* Écran de fin */
+        #game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        #game-over h1 {
+            font-size: 4rem;
+            color: #ff8c00;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 140, 0, 0.7);
+        }
+
+        #final-score {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        #restart-btn {
+            background: linear-gradient(45deg, #ff8c00, #ff6600);
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #restart-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(255, 140, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HUD -->
+    <div id="hud">
+        <div class="hud-panel">
+            <h2>Score</h2>
+            <div id="score" class="hud-value">0</div>
+        </div>
+        <div class="hud-panel">
+            <h2>Temps</h2>
+            <div id="timer" class="hud-value">60</div>
+        </div>
+    </div>
+
+    <!-- Réticule -->
+    <div id="reticle"></div>
+
+    <!-- Instructions -->
+    <div id="instructions">
+        <h3>🎯 Instructions</h3>
+        <p>🦃 <strong>DINDE</strong> = +10 points</p>
+        <p>🐔 <strong>POULET</strong> = -20 points</p>
+        <p>Utilisez la <strong>SOURIS</strong> pour viser</p>
+        <p>Cliquez <strong>DROIT</strong> pour tirer</p>
+    </div>
+
+    <!-- Écran de fin -->
+    <div id="game-over">
+        <h1>🦃 Temps Écoulé ! 🦃</h1>
+        <div id="final-score">Score Final: 0</div>
+        <button id="restart-btn">Rejouer</button>
+    </div>
+
+    <!-- Scène A-Frame -->
+    <a-scene>
+        <!-- Assets -->
+        <a-assets>
+            <!-- Modèles 3D -->
+            <a-asset-item id="turkey-model" src="turkey.glb"></a-asset-item>
+            <a-asset-item id="chicken-model" src="chicken.glb"></a-asset-item>
+            <a-asset-item id="house-model" src="house.glb"></a-asset-item>
+            <a-asset-item id="table-model" src="table.glb"></a-asset-item>
+            <a-asset-item id="thanksgiving-model" src="thanksgiving.glb"></a-asset-item>
+            <a-asset-item id="plate-model" src="plate.glb"></a-asset-item>
+            <a-asset-item id="dessert-model" src="dessert.glb"></a-asset-item>
+            <a-asset-item id="dessert2-model" src="dessert2.glb"></a-asset-item>
+
+            <!-- Sons -->
+            <audio id="sound-shoot" src="shoot.mp3" preload="auto"></audio>
+            <audio id="sound-hit" src="good.mp3" preload="auto"></audio>
+            <audio id="sound-wrong" src="wrong.mp3" preload="auto"></audio>
+            <audio id="sound-ambient" src="thanksgiving_day.mp3" loop preload="auto"></audio>
+        </a-assets>
+
+        <!-- Environnement -->
+        <a-sky color="#9c978f"></a-sky>
+
+        <!-- Lumières -->
+        <a-light type="ambient" color="#FFF" intensity="0.6"></a-light>
+        <a-light type="directional" position="5 10 7" intensity="0.8" color="#FFEECC"></a-light>
+        <a-light type="point" position="0 3 0" color="#FF8C00" intensity="0.4" distance="30"></a-light>
+
+        <!-- Son d'ambiance -->
+        <a-entity sound="src: #sound-ambient; autoplay: true; loop: true; volume: 0.2"></a-entity>
+
+        <!-- Map principale - Maison -->
+        <a-entity gltf-model="#house-model" position="0.44554 5.01953 0.7286" scale="38.06012 38.06012 38.06012"></a-entity>
+
+        <!-- Table -->
+        <a-entity gltf-model="#table-model" position="18.66694 -0.14289 0.35089" scale="0.136 0.13552 0.13552"></a-entity>
+
+        <!-- Décoration Thanksgiving au-dessus de la table -->
+        <a-entity gltf-model="#thanksgiving-model" position="0 2.87995 -8.70258" scale="1.52949 1.52949 1.52949"></a-entity>
+
+        <!-- Assiettes (4x plate.glb) -->
+        <a-entity gltf-model="#plate-model" position="-8.43987 2.5827 -8.75621" scale="0.02569 0.02569 0.02569"></a-entity>
+        <a-entity gltf-model="#plate-model" position="-3.18505 2.5827 -8.75621" scale="0.02569 0.02569 0.02569"></a-entity>
+        <a-entity gltf-model="#plate-model" position="3.28615 2.5827 -8.75621" scale="0.02569 0.02569 0.02569"></a-entity>
+        <a-entity gltf-model="#plate-model" position="5.38754 2.5827 -8.75621" scale="0.02569 0.02569 0.02569"></a-entity>
+
+        <!-- Desserts -->
+        <a-entity gltf-model="#dessert-model" position="5.77156 3.34089 -10.94159" scale="3.953 3.953 3.95315"></a-entity>
+        <a-entity gltf-model="#dessert2-model" position="-6.0612 3.18618 -8.79281" rotation="0 91.17019027680688 0"></a-entity>
+
+        <!-- Caméra avec raycaster -->
+        <a-entity position="0 1.6 0">
+            <a-camera look-controls wasd-controls="enabled: false">
+                <a-entity cursor="fuse: false; rayOrigin: mouse" 
+                          raycaster="objects: .shootable; far: 50"
+                          position="0 0 -1">
+                </a-entity>
+            </a-camera>
+        </a-entity>
+
+        <!-- Zone de spawn des cibles (les cibles seront ajoutées dynamiquement) -->
+    </a-scene>
+
+    <script>
+        // ========== CONFIGURATION ==========
+        const GAME_DURATION = 120; // Durée du jeu en secondes
+        const SPAWN_INTERVAL = 1500; // Apparition toutes les 1.5 secondes
+        const TARGET_LIFETIME = 5000; // Durée de vie d'une cible (5 secondes)
+        const TURKEY_POINTS = 10; // Points pour une dinde
+        const CHICKEN_PENALTY = -20; // Pénalité pour un poulet
+
+        // ========== VARIABLES D'ÉTAT ==========
+        let score = 0;
+        let timeRemaining = GAME_DURATION;
+        let isGameActive = false;
+        let spawnTimer = null;
+        let gameTimer = null;
+
+        // ========== ÉLÉMENTS DOM ==========
+        const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('timer');
+        const gameOverScreen = document.getElementById('game-over');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const restartBtn = document.getElementById('restart-btn');
+        const scene = document.querySelector('a-scene');
+
+        // Sons
+        const shootSound = document.getElementById('sound-shoot');
+        const hitSound = document.getElementById('sound-hit');
+        const wrongSound = document.getElementById('sound-wrong');
+
+        // ========== COMPOSANT A-FRAME POUR LES CIBLES ==========
+        AFRAME.registerComponent('target', {
+            schema: {
+                type: { type: 'string', default: 'turkey' }, // 'turkey' ou 'chicken'
+                speed: { type: 'number', default: 0.02 }
+            },
+
+            init: function () {
+                // Direction aléatoire de mouvement
+                const angle = Math.random() * Math.PI * 2;
+                this.direction = new THREE.Vector3(
+                    Math.cos(angle),
+                    0,
+                    Math.sin(angle)
+                );
+
+                // Temps de création
+                this.birthTime = Date.now();
+
+                // Animation de flottement
+                this.el.setAttribute('animation', {
+                    property: 'position',
+                    dir: 'alternate',
+                    dur: 1000,
+                    easing: 'easeInOutSine',
+                    loop: true,
+                    to: `${this.el.getAttribute('position').x} ${this.el.getAttribute('position').y + 0.3} ${this.el.getAttribute('position').z}`
+                });
+
+                // Rotation lente
+                this.el.setAttribute('animation__rotation', {
+                    property: 'rotation',
+                    to: '0 360 0',
+                    dur: 3000,
+                    easing: 'linear',
+                    loop: true
+                });
+            },
+
+            tick: function (time, deltaTime) {
+                if (!isGameActive) return;
+
+                // Vérifier la durée de vie
+                if (Date.now() - this.birthTime > TARGET_LIFETIME) {
+                    this.destroy();
+                    return;
+                }
+
+                // Déplacement
+                const pos = this.el.object3D.position;
+                pos.x += this.direction.x * this.data.speed;
+                pos.z += this.direction.z * this.data.speed;
+
+                // Supprimer si hors limites
+                if (Math.abs(pos.x) > 30 || Math.abs(pos.z) > 30) {
+                    this.destroy();
+                }
+            },
+
+            destroy: function () {
+                if (this.el.parentNode) {
+                    this.el.parentNode.removeChild(this.el);
+                }
+            }
+        });
+
+        // ========== FONCTION DE SPAWN DES CIBLES ==========
+        function spawnTarget() {
+            if (!isGameActive) return;
+
+            const target = document.createElement('a-entity');
+            
+            // 50% chance de dinde, 50% chance de poulet
+            const isTurkey = Math.random() < 0.5;
+            const targetType = isTurkey ? 'turkey' : 'chicken';
+
+            // Position aléatoire autour du joueur
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 8 + Math.random() * 7;
+            const x = Math.cos(angle) * distance;
+            const z = Math.sin(angle) * distance;
+            const y = 1.5 + Math.random() * 2; // Hauteur variable
+
+            target.setAttribute('position', `${x} ${y} ${z}`);
+            target.setAttribute('class', 'shootable');
+            target.setAttribute('target', `type: ${targetType}`);
+
+            // Charger le bon modèle
+            if (isTurkey) {
+                target.setAttribute('gltf-model', '#turkey-model');
+                target.setAttribute('scale', '1.5 1.5 1.5');
+            } else {
+                target.setAttribute('gltf-model', '#chicken-model');
+                target.setAttribute('scale', '0.03 0.03 0.03');
+            }
+
+            // Événement de clic
+            target.addEventListener('click', function() {
+                onTargetHit(this, targetType);
+            });
+
+            scene.appendChild(target);
+        }
+
+        // ========== GESTION DU TIR ==========
+        function onTargetHit(targetElement, type) {
+            if (!isGameActive) return;
+
+            // Mise à jour du score
+            if (type === 'turkey') {
+                score += TURKEY_POINTS;
+                playSound(hitSound);
+            } else {
+                score += CHICKEN_PENALTY;
+                playSound(wrongSound);
+            }
+
+            updateScore();
+
+            // Effet d'explosion
+            createExplosion(targetElement.getAttribute('position'), type);
+
+            // Supprimer la cible
+            if (targetElement.parentNode) {
+                targetElement.parentNode.removeChild(targetElement);
+            }
+        }
+
+        // ========== EFFET D'EXPLOSION ==========
+        function createExplosion(position, type) {
+            const explosion = document.createElement('a-entity');
+            explosion.setAttribute('position', position);
+
+            // Couleur selon le type
+            const color = type === 'turkey' ? '#FF8C00' : '#FFD700';
+
+            // Particules
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('a-sphere');
+                particle.setAttribute('radius', '0.1');
+                particle.setAttribute('color', color);
+                
+                const angle = (i / 8) * Math.PI * 2;
+                const x = Math.cos(angle) * 2;
+                const z = Math.sin(angle) * 2;
+                
+                particle.setAttribute('animation', {
+                    property: 'position',
+                    to: `${x} ${Math.random() * 2} ${z}`,
+                    dur: 500,
+                    easing: 'easeOutQuad'
+                });
+                particle.setAttribute('animation__fade', {
+                    property: 'material.opacity',
+                    to: 0,
+                    dur: 500
+                });
+
+                explosion.appendChild(particle);
+            }
+
+            scene.appendChild(explosion);
+
+            // Nettoyer après l'animation
+            setTimeout(() => {
+                if (explosion.parentNode) {
+                    explosion.parentNode.removeChild(explosion);
+                }
+            }, 600);
+        }
+
+        // ========== GESTION DU TIR AU CLIC DROIT ==========
+        document.addEventListener('mousedown', (event) => {
+            if (event.button === 2 && isGameActive) { // Clic droit
+                event.preventDefault();
+                playSound(shootSound);
+            }
+        });
+
+        // Désactiver le menu contextuel
+        document.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+        });
+
+        // ========== UTILITAIRES ==========
+        function playSound(sound) {
+            sound.currentTime = 0;
+            sound.play();
+        }
+
+        function updateScore() {
+            scoreDisplay.textContent = score;
+        }
+
+        function updateTimer() {
+            timeRemaining--;
+            timerDisplay.textContent = timeRemaining;
+
+            if (timeRemaining <= 0) {
+                endGame();
+            }
+        }
+
+        // ========== GESTION DU JEU ==========
+        function startGame() {
+            isGameActive = true;
+            score = 0;
+            timeRemaining = GAME_DURATION;
+
+            updateScore();
+            timerDisplay.textContent = timeRemaining;
+
+            gameOverScreen.style.display = 'none';
+
+            // Démarrer les timers
+            spawnTimer = setInterval(spawnTarget, SPAWN_INTERVAL);
+            gameTimer = setInterval(updateTimer, 1000);
+
+            // Spawn immédiat de quelques cibles
+            spawnTarget();
+            setTimeout(spawnTarget, 500);
+        }
+
+        function endGame() {
+            isGameActive = false;
+
+            // Arrêter les timers
+            clearInterval(spawnTimer);
+            clearInterval(gameTimer);
+
+            // Supprimer toutes les cibles restantes
+            document.querySelectorAll('.shootable').forEach(target => {
+                if (target.parentNode) {
+                    target.parentNode.removeChild(target);
+                }
+            });
+
+            // Afficher l'écran de fin
+            finalScoreDisplay.textContent = `Score Final: ${score}`;
+            gameOverScreen.style.display = 'flex';
+        }
+
+        // ========== ÉVÉNEMENTS ==========
+        restartBtn.addEventListener('click', startGame);
+
+        // Démarrer le jeu une fois la scène chargée
+        scene.addEventListener('loaded', () => {
+            setTimeout(startGame, 1000);
+        });
+    </script>
+
+</body>
+</html>
