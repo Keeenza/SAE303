@@ -9,11 +9,12 @@ document.addEventListener('DOMContentLoaded', function () {
     
     function attachListener() {
         const coeur = document.getElementById('coeur');
+        const losange = document.getElementById('losange');
         const rond = document.getElementById('rond');
         const rond2 = document.getElementById('rond2');
         const rond3 = document.getElementById('rond3');
         const etoile = document.getElementById('etoile');
-        console.log('coeur element:', coeur, 'rond elements:', rond, rond2, rond3, 'etoile element:', etoile);
+        console.log('elements:', { coeur, losange, rond, rond2, rond3, etoile });
 
         function preserveAspectFor(el) {
             if (!el) return;
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // apply to elements if present
         preserveAspectFor(coeur);
+        preserveAspectFor(losange);
         preserveAspectFor(rond);
         preserveAspectFor(rond2);
         preserveAspectFor(rond3);
@@ -91,6 +93,13 @@ document.addEventListener('DOMContentLoaded', function () {
             coeur.addEventListener('click', function () {
                 console.log('Cœur cliqué');
                 showPopup('Vous avez cliqué sur le cœur !', 0);
+            });
+        }
+
+        if (losange) {
+            losange.addEventListener('click', function () {
+                console.log('Losange cliqué');
+                showPopup('Vous avez cliqué sur le losange !', 0);
             });
         }
 
