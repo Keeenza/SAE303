@@ -18,49 +18,112 @@
             </a-entity>
             
             <!-- Losange avec ombre bleue clignotante -->
-            <a-entity position="-0.5 0.1 0">
+            <a-entity position="0.3 0.3 0">
               <a-plane id="losange-shadow" src="img/losange.png" position="0 0 -0.01" height="0.552" width="1" rotation="0 0 0" material="transparent: true; color: #0088ff; opacity: 0.6; alphaTest: 0.5" scale="0.11 0.11 0.11" animation="property: material.opacity; from: 0.6; to: 0.1; dur: 1500; loop: true; dir: alternate; easing: easeInOutSine"></a-plane>
-              <a-plane id="losange" class="clickable" src="img/losange.png" position="0 0 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true; color: #ffffff" scale="0.1 0.1 0.1"></a-plane>
+              <a-plane id="losange" class="clickable" src="img/losange.png" position="0 0 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true; color: #ffffff" scale="0.5 0.5 0.5"></a-plane>
             </a-entity>
             
-            <!-- Rond avec ombre bleue clignotante -->
-            <a-entity position="0 0 0">
+            <!-- Rond avec ombre bleue clignotante et textes 3D -->
+            <a-entity position="-0.3 -0.5 0">
               <a-plane id="rond-shadow" src="img/rond.png" position="0 0 -0.01" height="0.552" width="1" rotation="0 0 0" material="transparent: true; color: #0088ff; opacity: 0.6; alphaTest: 0.5" scale="0.11 0.11 0.11" animation="property: material.opacity; from: 0.6; to: 0.1; dur: 1500; loop: true; dir: alternate; easing: easeInOutSine"></a-plane>
               <a-plane id="rond" class="clickable" src="img/rond.png" position="0 0 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true" scale="0.1 0.1 0.1"></a-plane>
+              
+              <!-- Textes 3D avec fond turquoise -->
+              <a-entity id="rond-container-top" position="0 0.15 0" visible="false">
+                <a-plane position="0 0 -0.001" width="0.25" height="0.04" material="color: #4bbab2; opacity: 0.95"></a-plane>
+                <a-text id="rond-text-top" value="Psychologie : 311" align="center" width="0.5" color="#ffffff" position="0 0 0"></a-text>
+              </a-entity>
+              
+              <a-entity id="rond-container-right" position="0.15 0 0" visible="false">
+                <a-plane position="0 0 -0.001" width="0.2" height="0.04" material="color: #4bbab2; opacity: 0.95"></a-plane>
+                <a-text id="rond-text-right" value="Infirmier : 331" align="center" width="0.5" color="#ffffff" position="0 0 0"></a-text>
+              </a-entity>
+              
+              <a-entity id="rond-container-bottom" position="0 -0.15 0" visible="false">
+                <a-plane position="0 0 -0.001" width="0.3" height="0.04" material="color: #4bbab2; opacity: 0.95"></a-plane>
+                <a-text id="rond-text-bottom" value="Osteopathe animalier : 71" align="center" width="0.6" color="#ffffff" position="0 0 0"></a-text>
+              </a-entity>
+              
+              <a-entity id="rond-container-left" position="-0.15 0 0" visible="false">
+                <a-plane position="0 0 -0.001" width="0.3" height="0.04" material="color: #4bbab2; opacity: 0.95"></a-plane>
+                <a-text id="rond-text-left" value="Preparateur pharmacie : 71" align="center" width="0.6" color="#ffffff" position="0 0 0"></a-text>
+              </a-entity>
             </a-entity>
             
-            <!-- Rond2 avec ombre bleue clignotante -->
-            <a-entity position="0 0.1 0">
+            <!-- Rond2 avec ombre bleue clignotante et textes 3D -->
+            <a-entity position="-0 -0.5 0">
               <a-plane id="rond2-shadow" src="img/rond.png" position="0 0 -0.01" height="0.552" width="1" rotation="0 0 0" material="transparent: true; color: #0088ff; opacity: 0.6; alphaTest: 0.5" scale="0.11 0.11 0.11" animation="property: material.opacity; from: 0.6; to: 0.1; dur: 1500; loop: true; dir: alternate; easing: easeInOutSine"></a-plane>
               <a-plane id="rond2" class="clickable" src="img/rond.png" position="0 0 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true" scale="0.1 0.1 0.1"></a-plane>
+              
+              <!-- Textes 3D avec fond turquoise -->
+              <a-entity id="rond2-container-top" position="0 0.15 0" visible="false">
+                <a-plane position="0 0 -0.001" width="0.2" height="0.04" material="color: #4bbab2; opacity: 0.95"></a-plane>
+                <a-text id="rond2-text-top" value="BTS NDRC : 91" align="center" width="0.5" color="#ffffff" position="0 0 0"></a-text>
+              </a-entity>
+              
+              <a-entity id="rond2-container-right" position="0.15 0 0" visible="false">
+                <a-plane position="0 0 -0.001" width="0.18" height="0.04" material="color: #4bbab2; opacity: 0.95"></a-plane>
+                <a-text id="rond2-text-right" value="BTS TC : 224" align="center" width="0.5" color="#ffffff" position="0 0 0"></a-text>
+              </a-entity>
+              
+              <a-entity id="rond2-container-bottom" position="0 -0.15 0" visible="false">
+                <a-plane position="0 0 -0.001" width="0.2" height="0.04" material="color: #4bbab2; opacity: 0.95"></a-plane>
+                <a-text id="rond2-text-bottom" value="Licence info-com : 168" align="center" width="0.5" color="#ffffff" position="0 0 0"></a-text>
+              </a-entity>
+              
+              <a-entity id="rond2-container-left" position="-0.15 0 0" visible="false">
+                <a-plane position="0 0 -0.001" width="0.28" height="0.04" material="color: #4bbab2; opacity: 0.95"></a-plane>
+                <a-text id="rond2-text-left" value="BTS MCO : 273" align="center" width="0.6" color="#ffffff" position="0 0 0"></a-text>
+              </a-entity>
             </a-entity>
             
-            <!-- Rond3 avec ombre bleue clignotante -->
-            <a-entity position="0 -0.1 0">
+            <!-- Rond3 avec ombre bleue clignotante et textes 3D -->
+            <a-entity position="0.3 -0.5 0">
               <a-plane id="rond3-shadow" src="img/rond.png" position="0 0 -0.01" height="0.552" width="1" rotation="0 0 0" material="transparent: true; color: #0088ff; opacity: 0.6; alphaTest: 0.5" scale="0.11 0.11 0.11" animation="property: material.opacity; from: 0.6; to: 0.1; dur: 1500; loop: true; dir: alternate; easing: easeInOutSine"></a-plane>
               <a-plane id="rond3" class="clickable" src="img/rond.png" position="0 0 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true" scale="0.1 0.1 0.1"></a-plane>
+              
+              <!-- Textes 3D avec fond turquoise -->
+              <a-entity id="rond3-container-top" position="0 0.15 0" visible="false">
+                <a-plane position="0 0 -0.001" width="0.2" height="0.04" material="color: #4bbab2; opacity: 0.95"></a-plane>
+                <a-text id="rond3-text-top" value="BUT MMI : 152" align="center" width="0.5" color="#ffffff" position="0 0 0"></a-text>
+              </a-entity>
+              
+              <a-entity id="rond3-container-right" position="0.15 0 0" visible="false">
+                <a-plane position="0 0 -0.001" width="0.18" height="0.04" material="color: #4bbab2; opacity: 0.95"></a-plane>
+                <a-text id="rond3-text-right" value="BTS SIO : 59" align="center" width="0.5" color="#ffffff" position="0 0 0"></a-text>
+              </a-entity>
+              
+              <a-entity id="rond3-container-bottom" position="0 -0.15 0" visible="false">
+                <a-plane position="0 0 -0.001" width="0.2" height="0.04" material="color: #4bbab2; opacity: 0.95"></a-plane>
+                <a-text id="rond3-text-bottom" value="Bachelor/Master JV : 64" align="center" width="0.5" color="#ffffff" position="0 0 0"></a-text>
+              </a-entity>
+              
+              <a-entity id="rond3-container-left" position="-0.15 0 0" visible="false">
+                <a-plane position="0 0 -0.001" width="0.3" height="0.04" material="color: #4bbab2; opacity: 0.95"></a-plane>
+                <a-text id="rond3-text-left" value="BUT R&T : 142" align="center" width="0.6" color="#ffffff" position="0 0 0"></a-text>
+              </a-entity>
             </a-entity>
             
             <!-- Etoile avec ombre bleue clignotante -->
-            <a-entity position="0.5 0 0">
+            <a-entity position="0.3 -0.3 0">
               <a-plane id="etoile-shadow" src="img/etoile.png" position="0 0 -0.01" height="0.552" width="1" rotation="0 0 0" material="transparent: true; color: #0088ff; opacity: 0.6; alphaTest: 0.5" scale="1.1 1.1 1.1" animation="property: material.opacity; from: 0.6; to: 0.1; dur: 1500; loop: true; dir: alternate; easing: easeInOutSine"></a-plane>
-              <a-plane id="etoile" class="clickable" src="img/etoile.png" position="0 0 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true" scale="1 1 1"></a-plane>
+              <a-plane id="etoile" class="clickable" src="img/etoile.png" position="0 0 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true" scale="0.5 0.5 0.5"></a-plane>
             </a-entity>
             
             <!-- Etoile2 avec ombre bleue clignotante -->
-            <a-entity position="-0.5 0.4 0">
+            <a-entity position="-0.3 0.3 0">
               <a-plane id="etoile2-shadow" src="img/etoile2.png" position="0 0.1 -0.01" height="0.552" width="1" rotation="0 0 0" material="transparent: true; color: #0088ff; opacity: 0.6; alphaTest: 0.5" scale="1.1 1.1 1.1" animation="property: material.opacity; from: 0.6; to: 0.1; dur: 1500; loop: true; dir: alternate; easing: easeInOutSine"></a-plane>
               <a-plane id="etoile2" class="clickable" src="img/etoile2.png" position="0 0 0" height="0.552" width="1" rotation="0 0 0" material="transparent: true" scale="0.5 0.5 0.5"></a-plane>
             </a-entity>
         </a-entity>
     </a-scene>
 
-    <!-- Popup HTML overlay (hidden by default)
+    <!-- Popup HTML overlay (hidden by default) -->
     <div id="popup-overlay" role="dialog" aria-modal="true">
       <div id="popup-box">
         <div id="popup-message">Message</div>
         <button id="popup-close">OK</button>
       </div>
-    </div> -->
+    </div>
   </body>
 </html>
