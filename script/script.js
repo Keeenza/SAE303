@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             
             // Create HTML content with links and colors
-            msg.innerHTML = '<a href="https://ubs-beziers.fr/ecoles-publiques-superieures/" target="_blank" style="display: block; margin: 10px 0; color: #fecf72; text-decoration: none; font-weight: bold;">liste des écoles publiques superieures</a>' +
+            msg.innerHTML = '<a href="https://ubs-beziers.fr/ecoles-publiques-superieures/" target="_blank" style="display: block; margin: 10px 0; color: #fecf72; text-decoration: none; font-weight: bold;">Liste des écoles publiques superieures</a>' +
                            '<a href="https://www.enseignement-prive.info/annuaire-enseignement-prive/beziers-34500" target="_blank" style="display: block; margin: 10px 0; color: #4bbab2; text-decoration: none; font-weight: bold;">Liste des écoles privees sous et hors contrat</a>';
             
             overlay.style.display = 'flex';
