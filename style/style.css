@@ -1,4 +1,4 @@
-/* Popup overlay styles moved from index.html */
+/* Popup overlay styles */
 #popup-overlay {
 	position: fixed;
 	left: 0;
@@ -35,11 +35,17 @@
 	#popup-box { max-width: 420px; }
 }
 
-/* Hover overlay for 'bonjour' (appears on mouseenter of #rond) */
-/* Old centered hover overlay removed — using four rond popups instead */
-
 /* Rond popups (four boxes positioned around the rond image) */
-#rond-popups { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10001; }
+#rond-popups, #rond2-popups, #rond3-popups { 
+	position: absolute; 
+	left: 0; 
+	top: 0; 
+	width: 100%; 
+	height: 100%; 
+	pointer-events: none; 
+	z-index: 10001; 
+}
+
 .rond-popup {
 	position: absolute;
 	display: none;
@@ -50,11 +56,10 @@
 	box-shadow: 0 6px 18px rgba(0,0,0,0.5);
 	font-size: 14px;
 	white-space: nowrap;
-	pointer-events: none; /* don't block pointer events — avoids mouseleave flicker */
+	pointer-events: none;
 }
 
 /* small offset tweak on narrow screens */
 @media (max-width: 480px) {
 	.rond-popup { font-size: 12px; padding: 6px 8px; }
 }
-
